@@ -15,6 +15,8 @@ typedef struct{
 } Frequencies;
 
 extern Frequencies i_sound;
+extern Frequencies k_sound;
+extern Frequencies v_sound;
 extern Frequencies e_sound;
 extern Frequencies ae_sound;
 extern Frequencies ah_sound;

@@ -17,7 +17,7 @@ class SineOscillator {
 
     SineOscillator(float f, float a);
 
-    float processConsonant(Frequencies &sound);
+    float processVoicelessConsonant(Frequencies &sound);
 
     float processVowel(Frequencies &sound);
     
@@ -29,7 +29,9 @@ class SineOscillator {
 
     void generateVowel(float duration, Frequencies &sound);
 
-    void generateConsonant(Frequencies &sound);
+    void generateVoicelessConsonant(Frequencies &sound);
+
+    void generateVoicedConsonant(Frequencies &sound);
 
     void finalizeWAV();
 

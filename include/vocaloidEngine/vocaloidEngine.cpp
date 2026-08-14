@@ -7,11 +7,12 @@
         maxAmplitude = pow(2, bitDepth-1) - 1;
     }
 
-    float SineOscillator::processConsonant(Frequencies &sound){
+    float SineOscillator::processVoicelessConsonant(Frequencies &sound){
         static unsigned int seed = 12345;
 
         seed = seed * 1103515245 + 12345;
-        float noise = ((seed >> 16) & 0x7FFF) / 16384.0f - 1.0f;
+        float noise = ((seed >> 16) & 0x7FFF) / 32767.0f;
+        noise = noise * 2.0f - 1.0f;
 
         float burst =
             applyBiquadFilter(noise, sound.f1, sound.bw1, sampleRate,
@@ -32,13 +33,7 @@
                             sound.f3_y1,
                             sound.f3_y2);
 
-        burst *= 0.5f;
-
-        if(burst > 1.0f)
-            burst = 1.0f;
-
-        if(burst < -1.0f)
-            burst = -1.0f;
+        burst *= 0.25f;
 
         return burst;
     }
@@ -139,15 +134,36 @@
         resetFrequencies(sound);
     }
 
-    void SineOscillator::generateConsonant(Frequencies &sound){
+    void SineOscillator::generateVoicelessConsonant(Frequencies &sound){
         if(!outputFile){
             std::cerr << "Output File is missing.\n";
             return;
         }
         for(int i = 0; i < sampleRate*0.05; i++){
-            auto sample = processConsonant(sound);
+            auto sample = processVoicelessConsonant(sound);
             short intSample = static_cast<short>(sample*maxAmplitude);
             outputFile.write(reinterpret_cast<char*> (&intSample), 2);
+        }
+        resetFrequencies(sound);
+    }
+
+    void SineOscillator::generateVoicedConsonant(Frequencies &sound){
+        if(!outputFile){
+            std::cerr << "Output File is missing.\n";
+            return;
+        }
+        int length = sampleRate * 0.05;
+
+        for(int i = 0; i < length; i++){
+            float t = (float)i / length; 
+
+            float sample1 = processVoicelessConsonant(sound);
+            float sample2 = processVowel(sound);
+
+            float sample = sample1 * (1.0f - t) + sample2 * t;
+
+            short intSample = static_cast<short>(sample * maxAmplitude);
+            outputFile.write(reinterpret_cast<char*>(&intSample), 2);
         }
         resetFrequencies(sound);
     }
