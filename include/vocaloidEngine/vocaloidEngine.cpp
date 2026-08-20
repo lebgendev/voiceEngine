@@ -14,24 +14,11 @@
         float noise = ((seed >> 16) & 0x7FFF) / 32767.0f;
         noise = noise * 2.0f - 1.0f;
 
-        float burst =
-            applyBiquadFilter(noise, sound.f1, sound.bw1, sampleRate,
-                            sound.f1_x1,
-                            sound.f1_x2,
-                            sound.f1_y1,
-                            sound.f1_y2)
-            +
-            0.6f * applyBiquadFilter(noise, sound.f2, sound.bw2, sampleRate,
-                            sound.f2_x1,
-                            sound.f2_x2,
-                            sound.f2_y1,
-                            sound.f2_y2)
-            +
-            0.3f * applyBiquadFilter(noise, sound.f3, sound.bw3, sampleRate,
-                            sound.f3_x1,
-                            sound.f3_x2,
-                            sound.f3_y1,
-                            sound.f3_y2);
+        float f1_out = applyBiquadFilter(noise, sound.f1, sound.bw1, sampleRate, sound.f1_x1, sound.f1_x2, sound.f1_y1, sound.f1_y2);
+        float f2_out = applyBiquadFilter(noise, sound.f2, sound.bw2, sampleRate, sound.f2_x1, sound.f2_x2, sound.f2_y1, sound.f2_y2);
+        float f3_out = applyBiquadFilter(noise, sound.f3, sound.bw3, sampleRate, sound.f3_x1, sound.f3_x2, sound.f3_y1, sound.f3_y2);
+
+        float burst = f1_out + 0.6f * f2_out + 0.3f * f3_out;
 
         burst *= 0.25f;
 
@@ -40,7 +27,7 @@
 
     float SineOscillator::processVowel(Frequencies &sound){
         auto sample = 0.0;
-        for(int h = 1; h <= 40; h++){
+        for(int h = 1; h <= 50; h++){
             sample += (1.0f / h) * sin(2.0f * M_PI * h * angle);
         }
         sample *= amplitude;
@@ -79,7 +66,7 @@
 
     void SineOscillator::initWAV(std::string filename){
         this->outputFile.open(filename, std::ios::binary | std::ios::trunc);
-        std::cout << filename << "initialized";
+        std::cout << filename << " initialized";
     }
 
     void SineOscillator::initWAVHeaders(){

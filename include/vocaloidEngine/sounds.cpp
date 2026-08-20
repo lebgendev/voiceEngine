@@ -75,6 +75,11 @@ Frequencies d_sound = {
     700.0f, 1200.0f, 1800.0f
 };
 
+Frequencies t_sound = {
+    4500.0f, 6000.0f, 7500.0f,
+    800.0f, 1000.0f, 1200.0f
+};
+
 Frequencies g_sound = {
     2000.0f, 3500.0f, 5500.0f,
     800.0f, 1200.0f, 1800.0f
