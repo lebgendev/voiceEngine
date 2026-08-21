@@ -21,4 +21,4 @@ You can compile the example generator directly using your preferred compiler:
 
 ```bash
 g++ main.cpp include/voiceEngine/*.cpp -o main.exe -I./include
-./voice_engine
+./main.exe
