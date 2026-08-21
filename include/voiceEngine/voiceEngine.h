@@ -2,8 +2,8 @@
 #include <fstream>
 #include <cstdint>
 
-#ifndef VOCALOIDENGINE_h
-#define VOCALOIDENGINE_h
+#ifndef VOICEENGINE_h
+#define VOICEENGINE_h
 
 class SineOscillator {
     float frequency, amplitude, angle= 0.0f;

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include "vocaloidEngine/vocaloidEngine.h"
+#include "voiceEngine/voiceEngine.h"
 
 int main(){
     SineOscillator osc(175.0, 0.5);
