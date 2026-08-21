@@ -8,19 +8,17 @@
     }
 
     float SineOscillator::processVoicelessConsonant(Frequencies &sound){
-        static unsigned int seed = 12345;
-
-        seed = seed * 1103515245 + 12345;
-        float noise = ((seed >> 16) & 0x7FFF) / 32767.0f;
-        noise = noise * 2.0f - 1.0f;
+        static uint32_t xorshift_state = 2463534242U;
+        xorshift_state ^= xorshift_state << 13;
+        xorshift_state ^= xorshift_state >> 17;
+        xorshift_state ^= xorshift_state << 5;
+        float noise = (static_cast<float>(xorshift_state) / 4294967296.0f) * 2.0f - 1.0f;
 
         float f1_out = applyBiquadFilter(noise, sound.f1, sound.bw1, sampleRate, sound.f1_x1, sound.f1_x2, sound.f1_y1, sound.f1_y2);
-        float f2_out = applyBiquadFilter(noise, sound.f2, sound.bw2, sampleRate, sound.f2_x1, sound.f2_x2, sound.f2_y1, sound.f2_y2);
-        float f3_out = applyBiquadFilter(noise, sound.f3, sound.bw3, sampleRate, sound.f3_x1, sound.f3_x2, sound.f3_y1, sound.f3_y2);
+        float f2_out = applyBiquadFilter(f1_out, sound.f2, sound.bw2, sampleRate, sound.f2_x1, sound.f2_x2, sound.f2_y1, sound.f2_y2);
+        float f3_out = applyBiquadFilter(f2_out, sound.f3, sound.bw3, sampleRate, sound.f3_x1, sound.f3_x2, sound.f3_y1, sound.f3_y2);
 
-        float burst = f1_out + 0.6f * f2_out + 0.3f * f3_out;
-
-        burst *= 0.25f;
+        float burst = f3_out*0.25;
 
         return burst;
     }

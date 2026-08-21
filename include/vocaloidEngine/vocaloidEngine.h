@@ -1,5 +1,6 @@
 #include "sounds.h"
 #include <fstream>
+#include <cstdint>
 
 #ifndef VOCALOIDENGINE_h
 #define VOCALOIDENGINE_h
